@@ -9,10 +9,10 @@ pub struct Table<const N: usize> {
 
 impl<const N: usize> Table<N> {
     pub fn print_pretty(&self) {
-        let widths = std::iter::empty()
+        let column_widths = std::iter::empty()
             .chain(std::iter::once(&self.names))
             .chain(self.values.iter())
-            .map(|rows| rows.each_ref().map(|entry| entry.len()))
+            .map(|rows| rows.each_ref().map(|entry| unicode_width::UnicodeWidthStr::width(entry.as_str())))
             .fold([0; N], |widths1, widths2| {
                 let mut widths = [0; N];
                 for i in 0..N {
@@ -21,20 +21,23 @@ impl<const N: usize> Table<N> {
                 widths
             });
 
-        let width = widths.iter().sum::<usize>() + 3 * N + 1;
+        let table_width = column_widths.iter().sum::<usize>() + 3 * N + 1;
 
         let print_separator = || {
-            for _ in 0..width {
+            for _ in 0..table_width {
                 print!("=");
             }
             println!("");
         };
 
-        let print_row = |row| {
-            for (width, entry) in std::iter::zip(widths, row) {
-                // FIXME: Unicode Width
+        let print_row = |row : &[String; N]| {
+            for (column_width, entry) in std::iter::zip(column_widths, row) {
+                let entry_width = unicode_width::UnicodeWidthStr::width(entry.as_str());
                 print!("| ");
-                print!("{entry:width$}");
+                print!("{entry}");
+                for _ in entry_width..column_width {
+                    print!(" ");
+                }
                 print!(" ");
             }
             println!("|");

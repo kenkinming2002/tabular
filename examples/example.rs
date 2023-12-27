@@ -6,6 +6,7 @@ fn main() {
         values : vec![
             ["42".to_owned(),                                         "a very very long string".to_owned()],
             ["Extremely long string put here for testing".to_owned(), "dummy".to_owned()],
+            ["中文".to_owned(), "dummy".to_owned()],
         ],
     };
 
