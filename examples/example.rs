@@ -1,4 +1,5 @@
 use tabular::Table;
+use tabular::TableFormat;
 
 fn main() {
     let table = Table {
@@ -10,7 +11,7 @@ fn main() {
         ],
     };
 
-    println!("Pretty:"); table.print_pretty();
-    println!("Json:");   table.print_json();
-    println!("CSV:");    table.print_csv();
+    println!("Pretty:"); table.print(TableFormat::Pretty);
+    println!("Json:");   table.print(TableFormat::Json);
+    println!("CSV:");    table.print(TableFormat::CSV);
 }

@@ -7,8 +7,14 @@ pub struct Table<const N: usize> {
     pub values : Vec<[String; N]>,
 }
 
+pub enum TableFormat {
+    Pretty,
+    Json,
+    CSV,
+}
+
 impl<const N: usize> Table<N> {
-    pub fn print_pretty(&self) {
+    fn print_pretty(&self) {
         let column_widths = std::iter::empty()
             .chain(std::iter::once(&self.names))
             .chain(self.values.iter())
@@ -50,7 +56,7 @@ impl<const N: usize> Table<N> {
         print_separator();
     }
 
-    pub fn print_json(&self) {
+    fn print_json(&self) {
         print!("[");
         let mut outer_sep = "";
         for values in &self.values {
@@ -69,7 +75,7 @@ impl<const N: usize> Table<N> {
         println!("");
     }
 
-    pub fn print_csv(&self) {
+    fn print_csv(&self) {
         let print_row = |row| {
             let mut first = true;
             for entry in row {
@@ -85,6 +91,14 @@ impl<const N: usize> Table<N> {
 
         print_row(&self.names);
         self.values.iter().for_each(print_row);
+    }
+
+    pub fn print(&self, format : TableFormat) {
+        match format {
+            TableFormat::Pretty => self.print_pretty(),
+            TableFormat::Json   => self.print_json(),
+            TableFormat::CSV    => self.print_csv(),
+        }
     }
 }
 
