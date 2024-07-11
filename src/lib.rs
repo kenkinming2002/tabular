@@ -6,6 +6,8 @@ pub struct Table<const N: usize> {
     pub values : Vec<[String; N]>,
 }
 
+#[derive(Debug, Clone, Copy)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
 pub enum TableFormat {
     Pretty,
     Json,
