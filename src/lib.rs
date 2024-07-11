@@ -1,6 +1,5 @@
 #![allow(incomplete_features)]
 #![feature(generic_const_exprs)]
-#![feature(array_methods)]
 
 pub struct Table<const N: usize> {
     pub names  : [String; N],
